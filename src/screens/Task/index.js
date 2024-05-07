@@ -17,7 +17,7 @@ import CheckBox from '@react-native-community/checkbox';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import PushNotification from 'react-native-push-notification';
 import {ScrollView} from 'react-native-gesture-handler';
-import RNFS from 'react-native-fs'
+import RNFS from 'react-native-fs';
 
 const Task = ({navigation}) => {
   const {tasks, taskID} = useSelector(state => state.taskReducer);
@@ -89,21 +89,22 @@ const Task = ({navigation}) => {
 
   const deleteImage = () => {
     RNFS.unlink(image)
-    .then(() => {
-      const index = tasks.findIndex(task => task.ID === taskID);
+      .then(() => {
+        const index = tasks.findIndex(task => task.ID === taskID);
         if (index > -1) {
-            let newTasks = [...tasks];
-            newTasks[index].Image = '';
-            AsyncStorage.setItem('Tasks', JSON.stringify(newTasks))
-                .then(() => {
-                    dispatch(setTasks(newTasks));
-                    getTask();
-                    Alert.alert('Success!', 'Task image is removed  .');
-                })
-                .catch(err => console.log(err))
+          let newTasks = [...tasks];
+          newTasks[index].Image = '';
+          AsyncStorage.setItem('Tasks', JSON.stringify(newTasks))
+            .then(() => {
+              dispatch(setTasks(newTasks));
+              getTask();
+              Alert.alert('Success!', 'Task image is removed  .');
+            })
+            .catch(err => console.log(err));
         }
-    }).catch(err => console.log(err))
-  }
+      })
+      .catch(err => console.log(err));
+  };
 
   const setTaskAlarm = () => {
     PushNotification.localNotificationSchedule({

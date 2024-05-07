@@ -52,6 +52,16 @@ const ToDo = ({navigation}) => {
     }
   };
 
+  const deleteTask = (id) => {
+    const filteredTasks = tasks.filter(task => task.ID !== id);
+    AsyncStorage.setItem('Tasks', JSON.stringify(filteredTasks))
+        .then(() => {
+            dispatch(setTasks(filteredTasks));
+            Alert.alert('Success!', 'Task removed successfully.');
+        })
+        .catch(err => console.log(err))
+}
+
   return (
     <View style={styles.container}>
       <View>
@@ -88,6 +98,16 @@ const ToDo = ({navigation}) => {
                   </Text>
                   <Text style={styles.subTitle}>{item.Desc}</Text>
                 </View>
+                <TouchableOpacity
+                                style={styles.delete}
+                                onPress={() => { deleteTask(item.ID) }}
+                            >
+                                <FontAwesome5
+                                    name={'trash'}
+                                    size={25}
+                                    color={'#ff3636'}
+                                />
+                            </TouchableOpacity>
               </View>
             </TouchableOpacity>
           )}
